@@ -3,7 +3,9 @@ using namespace std;
 
 void hanoi(int N, char S, char I, char D) {
     //BASE case
+    static int count = 0;
     if(N == 1)
+        cout << "Move number: " << ++count << endl
         cout << "Move disk " << N << " from " << S << " -- > " << D << endl;
     else {
         //move to smaller instance of the problem
