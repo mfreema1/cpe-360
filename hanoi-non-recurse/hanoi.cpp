@@ -30,13 +30,31 @@ void moveDisk(vector<disk> column_from, vector<disk> column_to, int column_to_po
     program_counter++;
 }
 
-//returns true if the vector has the smallest disk, false if it does not
-bool hasSmallestDisk(vector<disk> column_to_search) {
-    //smallest disk will always be on top due to rule of the game
-    int last_index = column_to_search.size() - 1;
-    if(column_to_search[last_index].altitude == number_of_disks)
-        return true;
-    return false;
+//this function acts much like the following function, perhaps could be consolidated,
+//solution isn't very dry right now.
+int getColumnWithSmallestDisk(vector<disk> columns_to_search[3]) {
+    for(int i = 0; i < 3; i++) {
+        int last_index = columns_to_search[i].size();
+        disk disk_to_inspect = columns_to_search[i][last_index];
+        if(disk_to_inspect.altitude == number_of_disks)
+            return i; // I want the column as a number 0 to 2
+    }
+}
+
+int getColumnWithNextSmallestDisk(vector<disk> columns_to_search [3]) {
+    int result = 0;
+    int max_altitude = 0;
+    for(int i = 0; i < 3; i++) {
+        int last_index = columns_to_search[i].size();
+        disk disk_to_inspect = columns_to_search[i][last_index];
+        //I only want the next smallest disk, so we need to block the altitude of the number
+        //of disks
+        if(disk_to_inspect.altitude > max_altitude && max_altitude != number_of_disks) {
+            max_altitude = disk_to_inspect.altitude;
+            result = i; //I want the column as a number 0 to 2
+        }
+    }
+    return result;
 }
 
 int main() {
@@ -78,22 +96,20 @@ int main() {
     while(column_3.size() < number_of_disks) {
 
         //skip phase 1 of the loop the first time through
-        if(program_counter != 1) {
-            //hardcode 3 to avoid friends.size()
-            for(int i = 0; i < 3; i++) {
-                //we know the index, can get a reference to the top disk
-                if(hasSmallestDisk(*friends[i])) {
-                    int last_index = board[i].size() - 1;
-                    disk disk_to_move = board[i][last_index];
-                    //math hack to determine location of move.  This works because we have 3 columns and
-                    //this disk must go to not current position and not last position.
-                    int destination_column = 6 - disk_to_move.curr_pos - disk_to_move.last_pos;
-                    //we subtract one to line up the destination column and the index of friends
-                    moveDisk(*friends[i], *friends[destination_column - 1], destination_column);
-                }
+        if(program_counter != 1 && program_counter % 2 == 0) {
+            int column_of_interest = getColumnWithSmallestDisk(*friends);
+            int last_index = board[column_of_interest].size() - 1;
+            disk disk_to_move = board[column_of_interest][last_index];
+            //math hack to determine location of move.  This works because we have 3 columns and
+            //this disk must go to not current position and not last position.
+            int destination_column = 6 - disk_to_move.curr_pos - disk_to_move.last_pos;
+            //we subtract one to line up the destination column and the index of friends
+            moveDisk(*friends[column_of_interest], *friends[destination_column - 1], destination_column);
             }
-        }
         //begin phase 2
+        else {
+            
+        }
     }
     return 1;
 }
