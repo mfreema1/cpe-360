@@ -21,6 +21,7 @@ int main() {
 
     int *friend_of_x;
     int x = 10;
+    int y = 20;
 
     //assigning an address to the pointer, you don't use a *, this is called referencing the pointer
     friend_of_x = &x; //friend of x becomes aware of the address of x
