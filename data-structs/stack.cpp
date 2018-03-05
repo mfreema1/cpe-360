@@ -54,7 +54,7 @@ class Stack {
         else {
             temp = top; //1
             top = top->next; //2
-            cout << "About to delet: " << temp->value << endl;
+            cout << "About to delete: " << temp->value << endl;
             delete temp;
         }
     }
