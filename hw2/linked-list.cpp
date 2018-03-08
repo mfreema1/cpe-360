@@ -98,16 +98,36 @@ class linkedList {
         }
     }
     void deleteFirstInstance(int x) {
+        int pos = 1;
+        chunk* traverse;
+        traverse = head;
+        while(traverse != NULL) {
+            if(traverse->value == x){
+                removeFromPosition(pos);
+                return;
+            }
+            traverse = traverse->next;
+            pos++;
+        }
+        cout << "Sorry, that item wasn't in the list" << endl; //we would have returned otherwise
         //search the linked list for the value and delete it
     }
     void deleteAllInstances(int x) {
-        //search the list.  Keep a list of the positions
-        //delete the first position in the list (they should be in order
-        //by the way you collect them)
-        //once deleted, pop the first index off and reduce the others by 1,
-        //as the list will have reduced in size and they will no longer be
-        //valid
+        int pos = 1;
+        chunk* traverse;
+        traverse = head;
+        while(traverse != NULL) {
+            if(traverse->value == x)
+                removeFromPosition(pos);
+            else
+                pos++; //if you remove, positions will all shift down one, so dont increment
+            traverse = traverse->next;
+        }
     }
+    //hunt a value and ask as you move through if you'd like to delete at that position
+    // void sequentialSearchAndDelete() {
+
+    // }
 };
 
 int main() {
@@ -118,7 +138,9 @@ int main() {
         cout << "Press 1 to insert at the head of the linked list" << endl;
         cout << "Press 2 to insert at a position" << endl;
         cout << "Press 3 to delete at a position" << endl;
-        cout << "Press 4 to display" << endl;
+        cout << "Press 4 to delete first instance of value" << endl;
+        cout << "Press 5 to delete all instances of value" << endl;
+        cout << "Press 6 to display" << endl;
         cout << "Anything else to quit" << endl;
         cin >> choice;
         switch(choice) {
@@ -140,6 +162,16 @@ int main() {
                 object.removeFromPosition(position);
                 break;
             case 4:
+                cout << "Delete first instance of what value?" << endl;
+                cin >> value;
+                object.deleteFirstInstance(value);
+                break;
+            case 5:
+                cout << "Delete all instances of what value?" << endl;
+                cin >> value;
+                object.deleteAllInstances(value);
+                break;
+            case 6:
                 object.displayContents();
                 break;
             default:
